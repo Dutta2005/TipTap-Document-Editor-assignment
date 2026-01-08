@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📄 Paginated Rich Text Editor — Next.js + Tiptap
 
-## Getting Started
+A rich text editor built with **Next.js** and **Tiptap (ProseMirror-powered)** that supports:
 
-First, run the development server:
+✔ Rich text formatting (bold, italic, underline)  
+✔ Headings (H1, H2)  
+✔ Text alignment (left, center, right)  
+✔ Lists (bullet & ordered)  
+✔ Links insertion  
+✔ Pagination view  
+✔ Live word/character/page stats  
+✔ Print & HTML export  
+✔ Inline BubbleMenu for selected text
+
+---
+
+## 🧠 Features
+
+### Editor UI
+- Top toolbar with formatting buttons  
+- Pagination view showing page layout  
+- Responsive and interactive editor area  
+- Inline **BubbleMenu** when selecting text
+
+### Functional
+- Word count, character count, page count
+- Bold, Italic, Underline, Headings
+- Lists (bullet + ordered)
+- Text alignment
+- Link insertion
+- Print support (custom print stylesheet)
+- HTML export
+
+---
+
+## 🚀 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Next.js (App Router) | Frontend & SSR handling |
+| React | UI rendering |
+| Tiptap (@tiptap/react) | Rich text editor core |
+| Tailwind CSS | Styling |
+| Floating UI | Bubble menu positioning |
+| Lucide Icons | Toolbar icons |
+
+---
+
+## 📦 Installation
+
+Clone the repo:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/paginated-tiptap-editor.git
+cd paginated-tiptap-editor
+```
+Install dependencies:
+
+```bash
+  npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Development
+Start the dev server:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+  npm run dev
+```
+Open your browser:
 
-## Learn More
+```arduino
+  http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧩 How It Works
+### Client-only Rendering
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Tiptap requires browser APIs and breaks during SSR.
+I guard rendering using:
 
-## Deploy on Vercel
+```tsx
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
+```
+and enable safe mount with:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```js
+   immediatelyRender: false
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### BubbleMenu
+
+The bubble toolbar appears when text is selected:
+
+```tsx
+  <BubbleMenu editor={editor}>
+    …buttons…
+  </BubbleMenu>
+```
+
+---
+
+## 💡 Editor Features
+### Toolbar Actions
+
+| Action                  | Behavior                  |
+| ----------------------- | ------------------------- |
+| Bold                    | Toggles bold formatting   |
+| Italic                  | Toggles italic formatting |
+| Underline               | Adds underline            |
+| H1 / H2                 | Applies heading levels    |
+| Align Left/Center/Right | Text alignment            |
+| Bullet / Numbered list  | List formatting           |
+| Insert Link             | Prompt for URL            |
+| Print                   | Native print window       |
+| Export                  | Save as HTML file         |
+
+### Pagination
+
+- Based on calculated content height
+- Automatically updates as user types
+- Shows page numbers & navigates
+
+---
+
+## 📂 File Structure
+```scss
+src/
+├─ app/
+│   └─ page.tsx      # Main editor page
+├─ components/
+│   ├─ ui/
+│   │   ├─ button.tsx
+│   │   └─ separator.tsx
+├─ styles/
+│   └─ globals.css
+```
+
+---
+
+## 🧪 Notes
+
+- Works only in the browser (no SSR)
+- BubbleMenu leverages Floating UI instead of Tippy
+- Pagination uses scroll height & fixed page size
